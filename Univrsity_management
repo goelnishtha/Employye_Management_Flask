@@ -1,0 +1,266 @@
+// 1. Encapsulation: Student class with private attributes and getters/setters
+class Student {
+    private String name;
+    private String studentID;
+    private int age;
+
+    public Student(String name, String studentID, int age) {
+        this.name = name;
+        this.studentID = studentID;
+        setAge(age); // Using setter to include validation
+    }
+
+    // Getters and setters with validation
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getStudentID() {
+        return studentID;
+    }
+
+    public void setStudentID(String studentID) {
+        this.studentID = studentID;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        if (age > 0) {
+            this.age = age;
+        } else {
+            throw new IllegalArgumentException("Age must be positive.");
+        }
+    }
+
+    // Method to display student information
+    public void displayInfo() {
+        System.out.println("Student Name: " + name);
+        System.out.println("Student ID: " + studentID);
+        System.out.println("Age: " + age);
+    }
+}
+
+// 2. Inheritance: Base class UniversityStaff and derived classes Professor and AdminStaff
+class UniversityStaff {
+    protected String name;
+    protected String staffID;
+    protected String department;
+
+    public UniversityStaff(String name, String staffID, String department) {
+        this.name = name;
+        this.staffID = staffID;
+        this.department = department;
+    }
+
+    // Method to display staff information
+    public void displayInfo() {
+        System.out.println("Name: " + name);
+        System.out.println("Staff ID: " + staffID);
+        System.out.println("Department: " + department);
+    }
+}
+
+class Professor extends UniversityStaff {
+    private String specialization;
+
+    public Professor(String name, String staffID, String department, String specialization) {
+        super(name, staffID, department);
+        this.specialization = specialization;
+    }
+
+    // Overriding displayInfo method
+    @Override
+    public void displayInfo() {
+        super.displayInfo();
+        System.out.println("Specialization: " + specialization);
+    }
+}
+
+class AdminStaff extends UniversityStaff {
+    private String role;
+
+    public AdminStaff(String name, String staffID, String department, String role) {
+        super(name, staffID, department);
+        this.role = role;
+    }
+
+    // Overriding displayInfo method
+    @Override
+    public void displayInfo() {
+        super.displayInfo();
+        System.out.println("Role: " + role);
+    }
+}
+
+// 3. Polymorphism: Course class with overloaded enrollStudent methods and subclasses overriding conductClass method
+class Course {
+    private String courseName;
+
+    public Course(String courseName) {
+        this.courseName = courseName;
+    }
+
+    // Overloaded methods for enrolling students
+    public void enrollStudent(String studentName) {
+        System.out.println(studentName + " has been enrolled in " + courseName);
+    }
+
+    public void enrollStudent(String studentName, String studentID) {
+        System.out.println("Student " + studentName + " (ID: " + studentID + ") has been enrolled in " + courseName);
+    }
+
+    // Method to be overridden by subclasses
+    public void conductClass() {
+        System.out.println("Conducting a general class for " + courseName);
+    }
+}
+
+class OnlineCourse extends Course {
+    public OnlineCourse(String courseName) {
+        super(courseName);
+    }
+
+    // Overriding conductClass method
+    @Override
+    public void conductClass() {
+        System.out.println("Conducting an online class for " + getCourseName());
+    }
+}
+
+class OfflineCourse extends Course {
+    public OfflineCourse(String courseName) {
+        super(courseName);
+    }
+
+    // Overriding conductClass method
+    @Override
+    public void conductClass() {
+        System.out.println("Conducting an offline class for " + getCourseName());
+    }
+}
+
+// 4. Abstraction: Abstract class UniversityMember and concrete subclasses
+abstract class UniversityMember {
+    protected String name;
+    protected String id;
+
+    public UniversityMember(String name, String id) {
+        this.name = name;
+        this.id = id;
+    }
+
+    // Abstract method to be implemented by subclasses
+    public abstract void performRole();
+
+    // Concrete method
+    public void showDetails() {
+        System.out.println("Name: " + name);
+        System.out.println("ID: " + id);
+    }
+}
+
+class TeachingStaff extends UniversityMember {
+    public TeachingStaff(String name, String id) {
+        super(name, id);
+    }
+
+    // Implementing abstract method
+    @Override
+    public void performRole() {
+        System.out.println(name + " is teaching students.");
+    }
+}
+
+class NonTeachingStaff extends UniversityMember {
+    public NonTeachingStaff(String name, String id) {
+        super(name, id);
+    }
+
+    // Implementing abstract method
+    @Override
+    public void performRole() {
+        System.out.println(name + " is managing university operations.");
+    }
+}
+
+// 5. Multiple Inheritance using Interfaces
+interface Researcher {
+    void conductResearch();
+}
+
+interface Mentor {
+    void guideStudents();
+}
+
+class SeniorProfessor extends UniversityStaff implements Researcher, Mentor {
+    private String specialization;
+
+    public SeniorProfessor(String name, String staffID, String department, String specialization) {
+        super(name, staffID, department);
+        this.specialization = specialization;
+    }
+
+    // Implementing methods from interfaces
+    @Override
+    public void conductResearch() {
+        System.out.println(name + " is conducting research in " + specialization);
+    }
+
+    @Override
+    public void guideStudents() {
+        System.out.println(name + " is guiding students in the " + department + " department.");
+    }
+
+    // Overriding displayInfo method
+    @Override
+    public void displayInfo() {
+        super.displayInfo();
+        System.out.println("Specialization: " + specialization);
+    }
+}
+
+// 6. Report Generation with File Handling and Exception Handling
+import java.io.*;
+import java.util.*;
+
+class ReportGenerator {
+    private List<Student> students;
+    private List<UniversityStaff> staff;
+    private List<Course> courses;
+
+    public ReportGenerator() {
+        students = new ArrayList<>();
+        staff = new ArrayList<>();
+        courses = new ArrayList<>();
+    }
+
+    // Methods to add data
+    public void addStudent(Student student) {
+        students.add(student);
+    }
+
+    public void addStaff(UniversityStaff staffMember) {
+        staff.add(staffMember);
+    }
+
+    public void addCourse(Course course) {
+        courses.add(course);
+    }
+
+    // Method to generate reports
+    public void generateReports() {
+        try {
+            saveToFile("students.txt", students);
+            saveToFile("staff.txt", staff);
+            saveToFile("courses.txt", courses);
+        } catch (IOException e) {
+            System.err.println("Error writing to
+::contentReference[oaicite:0]{index=0}
+ 
